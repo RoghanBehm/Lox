@@ -1,0 +1,82 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/Lox.o",
+      "src/Lox.cpp"
+    ],
+    "directory": "/home/roghan/repo/cplox/lox",
+    "file": "/home/roghan/repo/cplox/lox/src/Lox.cpp",
+    "output": "/home/roghan/repo/cplox/lox/obj/Lox.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/Scanner.o",
+      "src/Scanner.cpp"
+    ],
+    "directory": "/home/roghan/repo/cplox/lox",
+    "file": "/home/roghan/repo/cplox/lox/src/Scanner.cpp",
+    "output": "/home/roghan/repo/cplox/lox/obj/Scanner.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/Token.o",
+      "src/Token.cpp"
+    ],
+    "directory": "/home/roghan/repo/cplox/lox",
+    "file": "/home/roghan/repo/cplox/lox/src/Token.cpp",
+    "output": "/home/roghan/repo/cplox/lox/obj/Token.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/main.o",
+      "src/main.cpp"
+    ],
+    "directory": "/home/roghan/repo/cplox/lox",
+    "file": "/home/roghan/repo/cplox/lox/src/main.cpp",
+    "output": "/home/roghan/repo/cplox/lox/obj/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "obj/to_string.o",
+      "src/to_string.cpp"
+    ],
+    "directory": "/home/roghan/repo/cplox/lox",
+    "file": "/home/roghan/repo/cplox/lox/src/to_string.cpp",
+    "output": "/home/roghan/repo/cplox/lox/obj/to_string.o"
+  }
+]
