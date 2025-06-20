@@ -42,6 +42,25 @@ void Scanner::scanToken() {
         case '/':
             if (match('/')) {
                 while (peek() != '\n' && !isAtEnd()) advance();
+            } else if (match('*')) {
+                int nesting = 1;
+                while (!isAtEnd()) {
+                    if (peek() == '/' && peekNext() == '*') {
+                        nesting++;
+                        advance();
+                        advance();       
+                    } else if (peek() == '*' && peekNext() == '/') {
+                        nesting--;
+                        advance();
+                        advance();
+                        if (nesting == 0) break;
+                    } else {
+                        advance();
+                    }
+
+                } if (nesting > 0) {
+                    lox.error(line, "Unterminated block comment");
+                }
             } else {
                 addToken(SLASH);
             }

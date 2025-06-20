@@ -1,1 +1,1 @@
-WIP C++ implementation of the jlox interpreter from **Crafting Interpreters**.
+WIP C++ implementation of the jlox interpreter from *Crafting Interpreters*.
