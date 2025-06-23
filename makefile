@@ -4,13 +4,17 @@ CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude
 
 # Directories
 SRC_DIR = src
+EXPR_DIR = $(SRC_DIR)/Expr
 OBJ_DIR = obj
 BIN_DIR = bin
 
-# Files
+# Target
 TARGET = lox
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+
+# Source and object files
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(EXPR_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+OBJS := $(patsubst $(EXPR_DIR)/%.cpp,$(OBJ_DIR)/Expr/%.o,$(OBJS))
 
 # Default target
 all: $(BIN_DIR)/$(TARGET)
@@ -20,12 +24,15 @@ $(BIN_DIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Compilation
+# Compilation rule
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/Expr/%.o: $(EXPR_DIR)/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
-

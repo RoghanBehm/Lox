@@ -1,4 +1,5 @@
 #include "to_string.hpp"
+#include <iomanip>
 
 std::string tokenTypeToString(TokenType type) {
     switch (type) {
@@ -59,7 +60,13 @@ std::string anyToString(const std::any& val) {
     if (!val.has_value()) return "nil";
 
     if (val.type() == typeid(double)) {
-        return std::to_string(std::any_cast<double>(val));
+        double num = std::any_cast<double>(val);
+        std::ostringstream oss;
+        oss << std::fixed << std::setprecision(6) << num;
+        std::string str = oss.str();
+        str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+        if (!str.empty() && str.back() == '.') str.pop_back();
+        return str;
     } else if (val.type() == typeid(int)) {
         return std::to_string(std::any_cast<int>(val));
     } else if (val.type() == typeid(bool)) {
