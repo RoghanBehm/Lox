@@ -19,5 +19,11 @@ public:
     std::any visitVar(const Var& expr) override;
     std::any visitComma(const Comma& expr) override;
     std::any visitTernary(const Ternary& expr) override;
+
+private:
+    std::string parenthesize(const std::string& name, const Expr& a);
+    std::string parenthesize(const std::string& name, const Expr& a, const Expr& b);
+    std::string rpn(const std::string& name, const Expr& a);
+    std::string rpn(const std::string& name, const Expr& a, const Expr& ab);
 };
 int printer();

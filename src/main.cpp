@@ -4,7 +4,6 @@
 
 int main(int argc, char* argv[]) {
     Lox lox;
-    printer();
     if (argc > 2) {
         std::cout << "Usage: jlox [script]\n";
         return 64;

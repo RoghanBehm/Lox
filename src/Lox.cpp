@@ -29,7 +29,7 @@ void Lox::run(std::string source, Lox& lox) {
 
     if (hadError) return;
     AstPrinter p;
-    std::cout << p.print(*expression);
+    std::cout << p.print(*expression) << "\n";
 }
 void Lox::runPrompt(Lox& lox) {
     std::string line;
@@ -55,9 +55,9 @@ void Lox::error(int line, std::string message) {
 
 void Lox::error(Token token, std::string message) {
     if (token.type == TokenType::EOF_) {
-        report(token.line, " at end", message);
+        report(token.line, " at end", message + "\n");
     } else {
-        report(token.line, " at '" + token.lexeme + "'", message);
+        report(token.line, " at '" + token.lexeme + "'", message + "\n");
     }
 }
 

@@ -23,6 +23,14 @@ std::unique_ptr<Expr> Parser::parse() {
 
 // Parses left-associative binary operators
 std::unique_ptr<Expr> Parser::laparse(std::function<std::unique_ptr<Expr>()> op_type, TokenType a, TokenType b) {
+    if (match({a, b})) {
+        Token op = previous();
+        error(op, "Expect left-hand operand");
+        std::unique_ptr<Expr> right = op_type();
+        std::unique_ptr<Expr> emptyLeft = std::make_unique<Literal>(std::any{});
+        return std::make_unique<Binary>(std::move(emptyLeft), op, std::move(right));
+    }
+
     std::unique_ptr<Expr> expr = op_type();
 
     while (match({a, b})) {
