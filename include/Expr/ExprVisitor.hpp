@@ -8,6 +8,7 @@ class Logical;
 class Literal;
 class Unary;
 class Var;
+class Comma;
 
 template<typename R>
 class ExprVisitor {
@@ -22,4 +23,5 @@ public:
     virtual R visitLiteral(const Literal& expr) = 0;
     virtual R visitUnary(const Unary& expr) = 0;
     virtual R visitVar(const Var& expr) = 0;
+    virtual R visitComma(const Comma& expr) = 0;
 };

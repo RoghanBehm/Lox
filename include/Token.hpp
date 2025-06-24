@@ -5,12 +5,13 @@
 
 class Token {
     private:
-        const std::any literal;
-        const int line;
+
     
     public:
+        const std::any literal;
         const TokenType type;
         std::string toString();
         Token(TokenType type, std::string lexeme, std::any literal, int line);
         const std::string lexeme;
+        const int line;
 };
