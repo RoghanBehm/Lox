@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include "Expr/ExprVisitor.hpp"
 #include "Expr/Expr.hpp"
@@ -6,6 +5,8 @@
 #include "Expr/Grouping.hpp"
 #include "Expr/Literal.hpp"
 #include "Expr/Unary.hpp"
+#include "Expr/Comma.hpp"
+#include "Expr/Ternary.hpp"
 #include "to_string.hpp"
 #include "token_type.hpp"
 
@@ -42,6 +43,15 @@ class AstPrinter : public ExprVisitor<std::any> {
         std::any visitVar(const Var& expr) override {
             return {};
         }
+
+        std::any visitComma(const Comma& expr) override {
+            return {};
+        }
+
+        std::any visitTernary(const Ternary& expr) override {
+            return {};
+        }
+
 
         
     private:
@@ -84,9 +94,9 @@ int printer() {
         std::move(groupingExpr)
     );
 
-    AstPrinter printer;
-    std::string result = printer.print(*expression);
-    std::cout << result << std::endl;
+  //  AstPrinter printer;
+  //  std::string result = printer.print(*expression);
+   // std::cout << result << std::endl;
 
     return 0;
 

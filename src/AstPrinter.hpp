@@ -17,5 +17,7 @@ public:
     std::any visitCall(const Call& expr) override;
     std::any visitLogical(const Logical& expr) override;
     std::any visitVar(const Var& expr) override;
+    std::any visitComma(const Comma& expr) override;
+    std::any visitTernary(const Ternary& expr) override;
 };
 int printer();

@@ -23,6 +23,8 @@ class Parser {
         std::unique_ptr<Expr> factor();
         std::unique_ptr<Expr> unary();
         std::unique_ptr<Expr> primary();
+        // std::unique_ptr<Expr> comma();
+        std::unique_ptr<Expr> ternary();
         Token consume(TokenType type, std::string message);
         void synchronize();
 

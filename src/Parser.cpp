@@ -5,6 +5,9 @@
 #include "Expr/Unary.hpp"
 #include "Expr/Literal.hpp"
 #include "Expr/Grouping.hpp"
+// #include "Expr/Comma.hpp"
+// #include "Expr/Ternary.hpp"
+#include <memory>
 
 // Constructor
 Parser::Parser(std::vector<Token> tokens, Lox& lox)
@@ -76,6 +79,33 @@ std::unique_ptr<Expr> Parser::primary() {
 
     throw error(peek(), "Expect expression.");
 }
+
+/* // Comma operator
+std::unique_ptr<Expr> Parser::comma() {
+    std::unique_ptr<Expr> expr = equality();
+    
+    while (match({TokenType::COMMA})) {
+        std::unique_ptr<Expr> right = equality();
+        expr = std::make_unique<Comma>(std::move(expr), std::move(right));
+    }
+    return expr;
+    
+}
+*/
+
+/* // Ternary operator
+std::unique_ptr<Expr> Parser::ternary() {
+    std::unique_ptr<Expr> expr = equality();
+    
+    if (match({TokenType::QUESTION})) {
+        std::unique_ptr<Expr> thenif = expression();
+        consume(TokenType::COLON, "Expect : after expression.");
+        std::unique_ptr<Expr> thenelse = expression();
+        expr = std::make_unique<Ternary>(std::move(expr), std::move(thenif), std::move(thenelse));
+    }
+    return expr;
+}
+*/
 
 bool Parser::match(std::initializer_list<TokenType> types) {
     for (auto &t : types) {
