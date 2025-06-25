@@ -28,7 +28,7 @@ class Parser {
         Token consume(TokenType type, std::string message);
         void synchronize();
 
-        std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, TokenType a, TokenType b);
+        std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, std::initializer_list<TokenType> types);
         class ParseError : public std::runtime_error {
             public:
                 ParseError() : std::runtime_error("") {}
