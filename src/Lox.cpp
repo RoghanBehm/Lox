@@ -65,6 +65,8 @@ void Lox::runPrompt() {
         if (!std::getline(std::cin, line)) break;
 
         run(line);
+        hadError = false;
+        hadRuntimeError = false;
     }
 }
 

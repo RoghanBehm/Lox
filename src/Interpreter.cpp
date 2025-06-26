@@ -40,7 +40,6 @@ std::any Interpreter::visitBinary(const Binary& expr) {
             checkNumberOperands(expr.getOp(), left, right);
             return std::any_cast<double>(left) - std::any_cast<double>(right);
         case TokenType::PLUS:
-            checkNumberOperands(expr.getOp(), left, right);
             if (left.type() == typeid(double) && right.type() == typeid(double)) {
                 return std::any_cast<double>(left) + std::any_cast<double>(right);
             }
@@ -49,6 +48,9 @@ std::any Interpreter::visitBinary(const Binary& expr) {
                 return std::any_cast<std::string>(left) + std::any_cast<std::string>(right);
             }
 
+            if (left.type() == typeid(std::string) || right.type() == typeid(std::string)) {
+                return stringify(left) + stringify(right);
+            }
             throw RuntimeError(expr.getOp(), "Operands must be two numbers or two strings.");
         case TokenType::SLASH:
             checkNumberOperands(expr.getOp(), left, right);
