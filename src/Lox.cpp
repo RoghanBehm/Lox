@@ -9,8 +9,6 @@
 #include "Scanner.hpp"
 #include "to_string.hpp"
 #include "Parser.hpp"
-#include "AstPrinter.hpp"
-#include "Expr/Expr.hpp"
 
 Interpreter* Lox::interpreter = nullptr;
 
@@ -48,14 +46,24 @@ void Lox::run(std::string source) {
     Scanner scanner(source, *this);
     std::vector<Token> tokens = scanner.scanTokens();
     Parser parser(tokens, *this);
-    std::unique_ptr<Expr> expression = parser.parse();
+    
+    try {
+        std::vector<std::unique_ptr<Stmt>> statements = parser.parse();
+        if (hadError) return;
+        
+        if (statements.empty()) {
+            std::cerr << "Parse returned no statements.\n";
+            return;
+        }
+        interpreter->interpret(statements);
+    } catch (const Parser::ParseError&) {
+        return;
+    }
+    
 
-    if (hadError) return;
-    if (!expression) {
-    std::cerr << "Parse returned null expression!\n";
-    return;
-}
-    interpreter->interpret(*expression);
+
+    
+
 }
 
 void Lox::runPrompt() {
@@ -73,7 +81,7 @@ void Lox::runPrompt() {
 
 
 void Lox::report(int line, std::string where, std::string message) {
-    std::cout << "[line ] " << std::to_string(line) << "] Error" << where << ": " << message;   
+    std::cout << "[line " << std::to_string(line) << "] Error" << where << ": " << message;   
     hadError = true;     
 }
 
@@ -91,7 +99,7 @@ void Lox::error(Token token, std::string message) {
 }
 
 void Lox::runtimeError(RuntimeError error) {
-    std::cout << error.what() << "\n[line " << error.token.line << "]";
+    std::cout << error.what() << "\n[line " << error.token.line << "]\n";
     hadRuntimeError = true;
 }
 

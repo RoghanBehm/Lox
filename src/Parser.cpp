@@ -7,18 +7,20 @@
 #include "Expr/Grouping.hpp"
 // #include "Expr/Comma.hpp"
 // #include "Expr/Ternary.hpp"
+#include "Stmt/Print.hpp"
+#include "Stmt/Expression.hpp"
 #include <memory>
 
 // Constructor
 Parser::Parser(std::vector<Token> tokens, Lox& lox)
     : lox(lox), tokens(tokens) {}
 
-std::unique_ptr<Expr> Parser::parse() {
-    try {
-        return expression();
-    } catch (const ParseError& error) {
-        return NULL;
+std::vector<std::unique_ptr<Stmt>> Parser::parse() {
+    std::vector<std::unique_ptr<Stmt>> statements;
+    while (!isAtEnd()) {
+        statements.push_back(statement());
     }
+    return statements;
 }
 
 // Parses left-associative binary operators
@@ -35,6 +37,25 @@ std::unique_ptr<Expr> Parser::laparse(std::function<std::unique_ptr<Expr>()> op_
 
 std::unique_ptr<Expr> Parser::expression() {
     return equality();
+}
+
+std::unique_ptr<Stmt> Parser::statement() {
+    if (match({TokenType::PRINT})) return printStatement();
+
+    return expressionStatement();
+}
+
+std::unique_ptr<Stmt> Parser::printStatement() {
+    std::unique_ptr<Expr> value = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+    return std::make_unique<Print>(std::move(value));
+
+}
+
+std::unique_ptr<Stmt> Parser::expressionStatement() {
+    std::unique_ptr<Expr> expr = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+    return std::make_unique<Expression>(std::move(expr));
 }
 
 std::unique_ptr<Expr> Parser::equality() {

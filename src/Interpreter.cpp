@@ -6,10 +6,11 @@
 
 Interpreter::Interpreter(Lox& lox) : lox(lox){}
 
-void Interpreter::interpret(const Expr& expression) {
+void Interpreter::interpret(const std::vector<std::unique_ptr<Stmt>>& statements) {
     try {
-        std::any value = evaluate(expression);
-        std::cout << stringify(value) << "\n";
+        for (const auto& statement : statements) {
+            execute(*statement);
+        }
     } catch (RuntimeError error) {
         lox.runtimeError(error);
     }
@@ -19,6 +20,22 @@ std::any Interpreter::evaluate(const Expr& expr) {
     return expr.accept(*this);
 }
 
+void Interpreter::execute(const Stmt& stmt) {
+    stmt.accept(*this);
+}
+
+// STATEMENTS
+void Interpreter::visitExpression(const Expression& stmt) {
+    evaluate(stmt.getExpr());
+}
+
+void Interpreter::visitPrint(const Print& stmt) {
+    std::any value = evaluate(stmt.getExpr());
+    std::cout << stringify(value) << "\n";
+}
+//////////////
+
+// EXPRESSIONS
 std::any Interpreter::visitBinary(const Binary& expr) {
     std::any left = evaluate(expr.getLeftExpr());
     std::any right = evaluate(expr.getRightExpr());
@@ -54,6 +71,7 @@ std::any Interpreter::visitBinary(const Binary& expr) {
             throw RuntimeError(expr.getOp(), "Operands must be two numbers or two strings.");
         case TokenType::SLASH:
             checkNumberOperands(expr.getOp(), left, right);
+            checkDivideByZero(expr.getOp(), right);
             return std::any_cast<double>(left) / std::any_cast<double>(right);
         case TokenType::STAR:
             checkNumberOperands(expr.getOp(), left, right);
@@ -89,6 +107,10 @@ std::any Interpreter::visitUnary(const Unary& expr) {
     return NULL;
 }
 
+//////////////
+
+// HELPERS
+
 void Interpreter::checkNumberOperand(Token op, std::any operand) {
     if (operand.type() == typeid(double)) return;
     throw RuntimeError(op, "Operand must be a number.");
@@ -97,6 +119,11 @@ void Interpreter::checkNumberOperand(Token op, std::any operand) {
 void Interpreter::checkNumberOperands(Token op, std::any left, std::any right) {
     if (left.type() == typeid(double) && right.type() == typeid(double)) return;
     throw RuntimeError(op, "Operands must be numbers.");
+}
+
+void Interpreter::checkDivideByZero(Token op, std::any right) {
+    if (std::any_cast<double>(right) != 0.0) return;
+    throw RuntimeError(op, "Cannot divide by zero.");
 }
 
 bool Interpreter::isTruthy(std::any obj) {
@@ -139,8 +166,13 @@ std::string Interpreter::stringify(std::any object) {
     return std::any_cast<std::string>(object);
 }
 
+//////////////
 
 
+
+// UNIMPLEMENTED VISIT METHODS
+
+// EXPRESSIONS
 std::any Interpreter::visitAssign(const Assign& expr) {
     // implement this
 }
@@ -164,3 +196,34 @@ std::any Interpreter::visitComma(const Comma& expr) {
 std::any Interpreter::visitTernary(const Ternary& expr) {
     // implement this
 }
+//////////////
+
+// STATEMENTS
+
+void Interpreter::visitBlock(const Block& expr) {
+    // implement this
+}
+
+void Interpreter::visitFunction(const Function& expr) {
+    // implement this 
+}
+
+void Interpreter::visitIf(const If& expr) {
+    // implement this
+}
+
+void Interpreter::visitReturn(const Return& expr) {
+    // implement this
+}
+
+void Interpreter::visitVarStmt(const VarStmt& expr) {
+    // implement this
+}
+
+void Interpreter::visitWhile(const While& expr) {
+    // implement this
+}
+
+
+
+//////////////

@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include "Expr/Expr.hpp"
+#include "Stmt/Stmt.hpp"
 #include "Token.hpp"
 #include "Lox.hpp"
 
@@ -29,13 +30,18 @@ class Parser {
         void synchronize();
 
         std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, std::initializer_list<TokenType> types);
+
+        
+    public:
+        Parser(std::vector<Token> tokens, Lox& lox);
+        std::vector<std::unique_ptr<Stmt>> parse();
+        std::unique_ptr<Stmt> statement();
+        std::unique_ptr<Stmt> printStatement();
+        std::unique_ptr<Stmt> expressionStatement();
         class ParseError : public std::runtime_error {
             public:
                 ParseError() : std::runtime_error("") {}
         };
-
         ParseError error(Token token, std::string message) const;
-    public:
-        Parser(std::vector<Token> tokens, Lox& lox);
-        std::unique_ptr<Expr> parse();
+
 };
