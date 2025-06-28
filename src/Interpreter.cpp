@@ -1,10 +1,14 @@
 #include "Interpreter.hpp"
+#include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
 #include <iostream>
 #include "Lox.hpp"
 
-Interpreter::Interpreter(Lox& lox) : lox(lox){}
+
+Interpreter::Interpreter(Lox& lox) : lox(lox){
+    environment = std::make_shared<Environment>();
+}
 
 void Interpreter::interpret(const std::vector<std::unique_ptr<Stmt>>& statements) {
     try {
@@ -24,6 +28,30 @@ void Interpreter::execute(const Stmt& stmt) {
     stmt.accept(*this);
 }
 
+void Interpreter::executeBlock(
+    const std::vector<std::unique_ptr<Stmt>>& statements,
+    std::shared_ptr<Environment> newEnvironment
+) {
+    std::shared_ptr<Environment> previous = environment;
+    environment = newEnvironment;
+
+    try {
+        for (const auto& stmt : statements) {
+            execute(*stmt);
+        }
+    } catch (...) {
+        environment = previous;
+        throw;
+    }
+
+    environment = previous;
+}
+
+
+void Interpreter::visitBlock(const Block& stmt) {
+    executeBlock(stmt.getStatements(), std::make_shared<Environment>(environment));
+}
+
 // STATEMENTS
 void Interpreter::visitExpression(const Expression& stmt) {
     evaluate(stmt.getExpr());
@@ -32,6 +60,15 @@ void Interpreter::visitExpression(const Expression& stmt) {
 void Interpreter::visitPrint(const Print& stmt) {
     std::any value = evaluate(stmt.getExpr());
     std::cout << stringify(value) << "\n";
+}
+
+void Interpreter::visitVarStmt(const VarStmt& stmt) {
+    std::any value = NULL;
+    if (stmt.hasInitializer()) {
+        value = evaluate(stmt.getInitializer());
+    }
+
+    environment->define(stmt.getName().lexeme, value);
 }
 //////////////
 
@@ -107,6 +144,17 @@ std::any Interpreter::visitUnary(const Unary& expr) {
     return NULL;
 }
 
+std::any Interpreter::visitVar(const Var& expr) {
+    return environment->get(expr.getName());
+}
+
+std::any Interpreter::visitAssign(const Assign& expr) {
+    std::any value = evaluate(expr.getValue());
+    environment->assign(expr.getName(), value);
+    return value;
+}
+
+
 //////////////
 
 // HELPERS
@@ -173,19 +221,11 @@ std::string Interpreter::stringify(std::any object) {
 // UNIMPLEMENTED VISIT METHODS
 
 // EXPRESSIONS
-std::any Interpreter::visitAssign(const Assign& expr) {
-    // implement this
-}
-
 std::any Interpreter::visitCall(const Call& expr) {
     // implement this
 }
 
 std::any Interpreter::visitLogical(const Logical& expr) {
-    // implement this
-}
-
-std::any Interpreter::visitVar(const Var& expr) {
     // implement this
 }
 
@@ -200,10 +240,6 @@ std::any Interpreter::visitTernary(const Ternary& expr) {
 
 // STATEMENTS
 
-void Interpreter::visitBlock(const Block& expr) {
-    // implement this
-}
-
 void Interpreter::visitFunction(const Function& expr) {
     // implement this 
 }
@@ -213,10 +249,6 @@ void Interpreter::visitIf(const If& expr) {
 }
 
 void Interpreter::visitReturn(const Return& expr) {
-    // implement this
-}
-
-void Interpreter::visitVarStmt(const VarStmt& expr) {
     // implement this
 }
 

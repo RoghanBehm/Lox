@@ -26,18 +26,23 @@ class Parser {
         std::unique_ptr<Expr> primary();
         // std::unique_ptr<Expr> comma();
         std::unique_ptr<Expr> ternary();
+        std::unique_ptr<Expr> assignment();
         Token consume(TokenType type, std::string message);
         void synchronize();
-
         std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, std::initializer_list<TokenType> types);
+
+        std::unique_ptr<Stmt> statement();
+        std::unique_ptr<Stmt> printStatement();
+        std::unique_ptr<Stmt> expressionStatement();
+        std::vector<std::unique_ptr<Stmt>> block();
+        std::unique_ptr<Stmt> declaration();
+        std::unique_ptr<Stmt> varDeclaration();
 
         
     public:
         Parser(std::vector<Token> tokens, Lox& lox);
         std::vector<std::unique_ptr<Stmt>> parse();
-        std::unique_ptr<Stmt> statement();
-        std::unique_ptr<Stmt> printStatement();
-        std::unique_ptr<Stmt> expressionStatement();
+
         class ParseError : public std::runtime_error {
             public:
                 ParseError() : std::runtime_error("") {}

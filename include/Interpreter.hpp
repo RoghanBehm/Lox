@@ -3,23 +3,28 @@
 #include <any>
 #include <memory>
 #include <vector>
+#include "Environment.hpp"
 #include "Expr/Expr.hpp"
 #include "Expr/ExprVisitor.hpp"
 #include "Expr/Grouping.hpp"
 #include "Expr/Literal.hpp"
 #include "Expr/Unary.hpp"
 #include "Expr/Binary.hpp"
+#include "Expr/Assign.hpp"
 #include "Stmt/Stmt.hpp"
 #include "Stmt/StmtVisitor.hpp"
 #include "Stmt/Expression.hpp"
 #include "Stmt/Print.hpp"
+#include "Stmt/VarStmt.hpp"
+#include "Stmt/Block.hpp"
 
-class Lox; // Forward declaration
+class Lox; 
 
 class Interpreter : public ExprVisitor<std::any>, public StmtVisitor<void> {
 public:
     Interpreter(Lox& lox);
     void interpret(const std::vector<std::unique_ptr<Stmt>>& statements);
+    void executeBlock(const std::vector<std::unique_ptr<Stmt>>& statements, std::shared_ptr<Environment> environment);
     
     // Expr visit methods
     std::any visitLiteral(const Literal& expr) override;
@@ -44,6 +49,7 @@ public:
     void visitWhile(const While& stmt) override;
 
 private:
+    std::shared_ptr<Environment> environment;
     std::any evaluate(const Expr& expr);
     bool isTruthy(std::any obj);
     bool isEqual(std::any a, std::any b);

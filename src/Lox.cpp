@@ -58,11 +58,7 @@ void Lox::run(std::string source) {
         interpreter->interpret(statements);
     } catch (const Parser::ParseError&) {
         return;
-    }
-    
-
-
-    
+    }    
 
 }
 

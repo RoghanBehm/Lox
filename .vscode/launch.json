@@ -12,7 +12,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/lox",
-            "args": [],
+            "args": ["src/monkey.lox"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
