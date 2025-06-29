@@ -31,7 +31,7 @@ bool Lox::runFile(const std::string& path) {
         source += line + "\n";
     }
 
-    run(source);
+    run(source, false);
     if (Lox::hadError) {
         exit(65);
     }
@@ -42,10 +42,10 @@ bool Lox::runFile(const std::string& path) {
     return true;
 }
 
-void Lox::run(std::string source) {
+void Lox::run(std::string source, bool repl) {
     Scanner scanner(source, *this);
     std::vector<Token> tokens = scanner.scanTokens();
-    Parser parser(tokens, *this);
+    Parser parser(tokens, *this, repl);
     
     try {
         std::vector<std::unique_ptr<Stmt>> statements = parser.parse();
@@ -54,6 +54,14 @@ void Lox::run(std::string source) {
         if (statements.empty()) {
             std::cerr << "Parse returned no statements.\n";
             return;
+        }
+
+        if (repl && statements.size() == 1) {
+            if (auto exprStmt = dynamic_cast<Expression*>(statements[0].get())) {
+                std::any result = interpreter->evaluate(exprStmt->getExpr());
+                std::cout << interpreter->stringify(result) << "\n";
+                return;
+            }
         }
         interpreter->interpret(statements);
     } catch (const Parser::ParseError&) {
@@ -68,11 +76,19 @@ void Lox::runPrompt() {
         std::cout << "> ";
         if (!std::getline(std::cin, line)) break;
 
-        run(line);
+        try {
+            run(line, true);
+        } catch (const RuntimeError& error) {
+            std::cerr << error.what() << "\n";
+            hadRuntimeError = true;
+        }
+
         hadError = false;
         hadRuntimeError = false;
     }
 }
+
+
 
 
 

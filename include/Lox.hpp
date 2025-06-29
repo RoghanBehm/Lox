@@ -12,7 +12,7 @@ class Lox {
         static bool hadRuntimeError;
         bool runFile(const std::string& path);
         void runPrompt();
-        void run(std::string source);
+        void run(std::string source, bool repl);
         void error(int line, std::string message);
         void error(Token token, std::string message);
         static void runtimeError(RuntimeError error);

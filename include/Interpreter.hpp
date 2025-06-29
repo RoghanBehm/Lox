@@ -25,7 +25,8 @@ public:
     Interpreter(Lox& lox);
     void interpret(const std::vector<std::unique_ptr<Stmt>>& statements);
     void executeBlock(const std::vector<std::unique_ptr<Stmt>>& statements, std::shared_ptr<Environment> environment);
-    
+    std::any evaluate(const Expr& expr);
+    std::string stringify(std::any object);
     // Expr visit methods
     std::any visitLiteral(const Literal& expr) override;
     std::any visitGrouping(const Grouping& expr) override;
@@ -50,10 +51,9 @@ public:
 
 private:
     std::shared_ptr<Environment> environment;
-    std::any evaluate(const Expr& expr);
+
     bool isTruthy(std::any obj);
     bool isEqual(std::any a, std::any b);
-    std::string stringify(std::any object);
     template<typename T>
     bool compare(const std::any& a, const std::any& b) {
         return std::any_cast<T>(a) == std::any_cast<T>(b);

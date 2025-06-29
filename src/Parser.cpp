@@ -16,8 +16,8 @@
 #include <memory>
 
 // Constructor
-Parser::Parser(std::vector<Token> tokens, Lox& lox)
-    : lox(lox), tokens(tokens) {}
+Parser::Parser(std::vector<Token> tokens, Lox& lox, bool repl)
+    : lox(lox), tokens(std::move(tokens)), repl(repl) {}
 
 std::vector<std::unique_ptr<Stmt>> Parser::parse() {
     std::vector<std::unique_ptr<Stmt>> statements;
@@ -79,7 +79,11 @@ std::unique_ptr<Stmt> Parser::varDeclaration() {
 
 std::unique_ptr<Stmt> Parser::expressionStatement() {
     std::unique_ptr<Expr> expr = expression();
-    consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+    if (repl) {
+        if (check(TokenType::SEMICOLON)) advance();
+    } else {
+        consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+    }
     return std::make_unique<Expression>(std::move(expr));
 }
 

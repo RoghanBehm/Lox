@@ -10,8 +10,9 @@ class Parser {
     private:
         Lox& lox;
         const std::vector<Token> tokens;
+        bool repl;
         int current = 0;
-        std::unique_ptr<Expr> expression();
+
         std::unique_ptr<Expr> equality();
         bool match(std::initializer_list<TokenType> types);
         bool check(TokenType type);
@@ -40,7 +41,7 @@ class Parser {
 
         
     public:
-        Parser(std::vector<Token> tokens, Lox& lox);
+        Parser(std::vector<Token> tokens, Lox& lox, bool repl);
         std::vector<std::unique_ptr<Stmt>> parse();
 
         class ParseError : public std::runtime_error {
@@ -48,5 +49,6 @@ class Parser {
                 ParseError() : std::runtime_error("") {}
         };
         ParseError error(Token token, std::string message) const;
+        std::unique_ptr<Expr> expression();
 
 };
