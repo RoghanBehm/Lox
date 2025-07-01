@@ -28,12 +28,17 @@ class Parser {
         // std::unique_ptr<Expr> comma();
         std::unique_ptr<Expr> ternary();
         std::unique_ptr<Expr> assignment();
+        std::unique_ptr<Expr> lor(); // Logical or
+        std::unique_ptr<Expr> land(); // Logical and
         Token consume(TokenType type, std::string message);
         void synchronize();
         std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, std::initializer_list<TokenType> types);
 
         std::unique_ptr<Stmt> statement();
+        std::unique_ptr<Stmt> forStatement();
+        std::unique_ptr<Stmt> ifStatement();
         std::unique_ptr<Stmt> printStatement();
+        std::unique_ptr<Stmt> whileStatement();
         std::unique_ptr<Stmt> expressionStatement();
         std::vector<std::unique_ptr<Stmt>> block();
         std::unique_ptr<Stmt> declaration();

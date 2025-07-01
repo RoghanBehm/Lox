@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude -g
+CXXFLAGS = -std=c++20 -Wall -Wextra -fsanitize=address,undefined -Iinclude -g
 
 # Directories
 SRC_DIR = src

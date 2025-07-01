@@ -11,12 +11,15 @@
 #include "Expr/Unary.hpp"
 #include "Expr/Binary.hpp"
 #include "Expr/Assign.hpp"
+#include "Expr/Logical.hpp"
 #include "Stmt/Stmt.hpp"
 #include "Stmt/StmtVisitor.hpp"
 #include "Stmt/Expression.hpp"
 #include "Stmt/Print.hpp"
 #include "Stmt/VarStmt.hpp"
+#include "Stmt/While.hpp"
 #include "Stmt/Block.hpp"
+#include "Stmt/If.hpp"
 
 class Lox; 
 
@@ -48,6 +51,7 @@ public:
     void visitReturn(const Return& stmt) override;
     void visitVarStmt(const VarStmt& stmt) override;
     void visitWhile(const While& stmt) override;
+
 
 private:
     std::shared_ptr<Environment> environment;

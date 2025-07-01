@@ -2,6 +2,7 @@
 #include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
+#include <cmath>
 #include <iostream>
 #include "Lox.hpp"
 
@@ -57,6 +58,14 @@ void Interpreter::visitExpression(const Expression& stmt) {
     evaluate(stmt.getExpr());
 }
 
+void Interpreter::visitIf(const If& stmt) {
+    if (isTruthy(evaluate(stmt.getCondition()))) {
+        execute(stmt.getThenBranch());
+    } else if (stmt.hasElseBranch()) {
+        execute(stmt.getElseBranch());
+    }
+}
+
 void Interpreter::visitPrint(const Print& stmt) {
     std::any value = evaluate(stmt.getExpr());
     std::cout << stringify(value) << "\n";
@@ -70,6 +79,14 @@ void Interpreter::visitVarStmt(const VarStmt& stmt) {
 
     environment->define(stmt.getName().lexeme, value);
 }
+
+void Interpreter::visitWhile(const While& stmt) {
+    while (isTruthy(evaluate(stmt.getCondition()))) {
+        execute(stmt.getBody());
+    }
+}
+
+
 //////////////
 
 // EXPRESSIONS
@@ -95,6 +112,7 @@ std::any Interpreter::visitBinary(const Binary& expr) {
             return std::any_cast<double>(left) - std::any_cast<double>(right);
         case TokenType::PLUS:
             if (left.type() == typeid(double) && right.type() == typeid(double)) {
+                
                 return std::any_cast<double>(left) + std::any_cast<double>(right);
             }
 
@@ -123,6 +141,18 @@ std::any Interpreter::visitBinary(const Binary& expr) {
 
 std::any Interpreter::visitLiteral(const Literal& expr) {
     return expr.getLiteral();
+}
+
+std::any Interpreter::visitLogical(const Logical& expr) {
+    std::any left = evaluate(expr.getLeftExpr());
+
+    if (expr.getOp().type == TokenType::OR) {
+        if (isTruthy(left)) return left;
+    } else {
+        if (!isTruthy(left)) return left;
+    }
+
+    return evaluate(expr.getRightExpr());
 }
 
 std::any Interpreter::visitGrouping(const Grouping& expr) {
@@ -181,6 +211,12 @@ bool Interpreter::isTruthy(std::any obj) {
         return std::any_cast<bool>(obj);
     }
 
+    if (obj.type() == typeid(double)) {
+        double value = std::any_cast<double>(obj);
+        if (std::isinf(value)) return false;
+        if (std::isnan(value)) return false;
+    }
+
     return true;
 }
 
@@ -225,10 +261,6 @@ std::any Interpreter::visitCall(const Call& expr) {
     // implement this
 }
 
-std::any Interpreter::visitLogical(const Logical& expr) {
-    // implement this
-}
-
 std::any Interpreter::visitComma(const Comma& expr) {
     // implement this
 }
@@ -244,15 +276,7 @@ void Interpreter::visitFunction(const Function& expr) {
     // implement this 
 }
 
-void Interpreter::visitIf(const If& expr) {
-    // implement this
-}
-
 void Interpreter::visitReturn(const Return& expr) {
-    // implement this
-}
-
-void Interpreter::visitWhile(const While& expr) {
     // implement this
 }
 
