@@ -1,4 +1,5 @@
 #include "Interpreter.hpp"
+#include "BreakException.hpp"
 #include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
@@ -82,8 +83,16 @@ void Interpreter::visitVarStmt(const VarStmt& stmt) {
 
 void Interpreter::visitWhile(const While& stmt) {
     while (isTruthy(evaluate(stmt.getCondition()))) {
+       try {
         execute(stmt.getBody());
+       } catch (const BreakException&) {
+            break;
+       }
     }
+}
+
+void Interpreter::visitBreak(const Break& stmt) {
+    throw BreakException(stmt.getName());
 }
 
 

@@ -20,6 +20,7 @@
 #include "Stmt/While.hpp"
 #include "Stmt/Block.hpp"
 #include "Stmt/If.hpp"
+#include "Stmt/Break.hpp"
 
 class Lox; 
 
@@ -51,7 +52,8 @@ public:
     void visitReturn(const Return& stmt) override;
     void visitVarStmt(const VarStmt& stmt) override;
     void visitWhile(const While& stmt) override;
-
+    void visitBreak(const Break& stmt) override;
+    
 
 private:
     std::shared_ptr<Environment> environment;

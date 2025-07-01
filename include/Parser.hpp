@@ -12,6 +12,7 @@ class Parser {
         const std::vector<Token> tokens;
         bool repl;
         int current = 0;
+        int ldepth = 0;
 
         std::unique_ptr<Expr> equality();
         bool match(std::initializer_list<TokenType> types);
@@ -43,6 +44,7 @@ class Parser {
         std::vector<std::unique_ptr<Stmt>> block();
         std::unique_ptr<Stmt> declaration();
         std::unique_ptr<Stmt> varDeclaration();
+        std::unique_ptr<Stmt> breakStatement();
 
         
     public:

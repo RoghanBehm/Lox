@@ -17,6 +17,8 @@
 #include "Stmt/Expression.hpp"
 #include "Stmt/VarStmt.hpp"
 #include "Stmt/Block.hpp"
+#include "Stmt/Break.hpp"
+#include <any>
 #include <cstddef>
 #include <memory>
 
@@ -65,11 +67,13 @@ std::unique_ptr<Stmt> Parser::statement() {
     if (match({TokenType::PRINT})) return printStatement();
     if (match({TokenType::WHILE})) return whileStatement();
     if (match({TokenType::LEFT_BRACE})) return std::make_unique<Block>(block());
+    if (match({TokenType::BREAK})) return breakStatement();
 
     return expressionStatement();
 }
 
 std::unique_ptr<Stmt> Parser::forStatement() {
+    ldepth++;
     consume(TokenType::LEFT_PAREN, "Expect '(' after 'for'.");
 
     std::unique_ptr<Stmt> initializer;
@@ -94,7 +98,7 @@ std::unique_ptr<Stmt> Parser::forStatement() {
     consume(TokenType::RIGHT_PAREN, "Expect ')' after for clauses.");
 
     std::unique_ptr<Stmt> body = statement();
-
+    ldepth--;
     if (increment != nullptr) {
         std::vector<std::unique_ptr<Stmt>> statements;
         statements.push_back(std::move(body));
@@ -146,12 +150,22 @@ std::unique_ptr<Stmt> Parser::varDeclaration() {
 }
 
 std::unique_ptr<Stmt> Parser::whileStatement() {
+    ldepth++;
     consume(TokenType::LEFT_PAREN, "Expect '(' after 'while'.");
     std::unique_ptr<Expr> condition = expression();
     consume(TokenType::RIGHT_PAREN, "Expect ')' after condition.");
     std::unique_ptr<Stmt> body = statement();
+    ldepth--;
 
     return std::make_unique<While>(std::move(condition), std::move(body));
+}
+
+std::unique_ptr<Stmt> Parser::breakStatement() {
+    if (ldepth == 0) throw error(previous(), "Cannot use 'break' outside of a loop.");
+    Token name = previous();
+    consume(TokenType::SEMICOLON, "Expect ';' after break statement.");
+    
+    return std::make_unique<Break>(std::move(name));
 }
 
 std::unique_ptr<Stmt> Parser::expressionStatement() {
