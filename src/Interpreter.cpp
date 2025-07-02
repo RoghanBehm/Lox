@@ -1,15 +1,19 @@
+#include <cmath>
+#include <iostream>
+#include <memory>
 #include "Interpreter.hpp"
 #include "BreakException.hpp"
 #include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
-#include <cmath>
-#include <iostream>
 #include "Lox.hpp"
+#include "LoxFunction.hpp"
 
 
 Interpreter::Interpreter(Lox& lox) : lox(lox){
-    environment = std::make_shared<Environment>();
+    globals = std::make_shared<Environment>();
+    environment = globals;
+
 }
 
 void Interpreter::interpret(const std::vector<std::unique_ptr<Stmt>>& statements) {
@@ -65,6 +69,11 @@ void Interpreter::visitIf(const If& stmt) {
     } else if (stmt.hasElseBranch()) {
         execute(stmt.getElseBranch());
     }
+}
+
+void Interpreter::visitFunction(const Function& stmt) {
+    std::shared_ptr<LoxCallable> function = std::make_shared<LoxFunction>(stmt, environment);
+    environment->define(stmt.getName().lexeme, function);
 }
 
 void Interpreter::visitPrint(const Print& stmt) {
@@ -146,6 +155,31 @@ std::any Interpreter::visitBinary(const Binary& expr) {
     }
 
     return NULL;
+}
+
+std::any Interpreter::visitCall(const Call& expr) {
+    std::any callee = evaluate(expr.getCallee());
+
+    std::vector<std::any> arguments;
+    for (const std::unique_ptr<Expr>& argument : expr.getArgruments()) {
+        arguments.push_back(evaluate(*argument));
+    }
+
+    std::shared_ptr<LoxCallable> function;
+
+    try {
+        function = std::any_cast<std::shared_ptr<LoxCallable>>(callee);
+    } catch (const std::bad_any_cast&) {
+        throw RuntimeError(expr.getParen(), "Can only call functions and classes.");
+    }
+
+    if (static_cast<int>(arguments.size()) != function->arity()) {
+        throw RuntimeError(expr.getParen(), "Expected " +
+            std::to_string(function->arity()) + " arguments but got " + 
+            std::to_string(arguments.size()) + ".");
+    }
+
+    return function->call(*this, arguments);
 }
 
 std::any Interpreter::visitLiteral(const Literal& expr) {
@@ -266,9 +300,6 @@ std::string Interpreter::stringify(std::any object) {
 // UNIMPLEMENTED VISIT METHODS
 
 // EXPRESSIONS
-std::any Interpreter::visitCall(const Call& expr) {
-    // implement this
-}
 
 std::any Interpreter::visitComma(const Comma& expr) {
     // implement this
@@ -281,11 +312,7 @@ std::any Interpreter::visitTernary(const Ternary& expr) {
 
 // STATEMENTS
 
-void Interpreter::visitFunction(const Function& expr) {
-    // implement this 
-}
-
-void Interpreter::visitReturn(const Return& expr) {
+void Interpreter::visitReturn(const Return& stmt) {
     // implement this
 }
 

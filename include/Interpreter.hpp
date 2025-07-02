@@ -10,6 +10,7 @@
 #include "Expr/Literal.hpp"
 #include "Expr/Unary.hpp"
 #include "Expr/Binary.hpp"
+#include "Expr/Call.hpp"
 #include "Expr/Assign.hpp"
 #include "Expr/Logical.hpp"
 #include "Stmt/Stmt.hpp"
@@ -31,13 +32,14 @@ public:
     void executeBlock(const std::vector<std::unique_ptr<Stmt>>& statements, std::shared_ptr<Environment> environment);
     std::any evaluate(const Expr& expr);
     std::string stringify(std::any object);
+    std::shared_ptr<Environment> globals = std::make_shared<Environment>();
     // Expr visit methods
     std::any visitLiteral(const Literal& expr) override;
     std::any visitGrouping(const Grouping& expr) override;
     std::any visitUnary(const Unary& expr) override;
     std::any visitBinary(const Binary& expr) override;
-    std::any visitAssign(const Assign& expr) override;
     std::any visitCall(const Call& expr) override;
+    std::any visitAssign(const Assign& expr) override;
     std::any visitLogical(const Logical& expr) override;
     std::any visitVar(const Var& expr) override;
     std::any visitComma(const Comma& expr) override;
@@ -57,7 +59,6 @@ public:
 
 private:
     std::shared_ptr<Environment> environment;
-
     bool isTruthy(std::any obj);
     bool isEqual(std::any a, std::any b);
     template<typename T>

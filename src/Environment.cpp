@@ -3,7 +3,6 @@
 
 void Environment::define(std::string name, std::any value) {
         values[name] = value;
-
     }
 
 std::any Environment::get(Token name) {

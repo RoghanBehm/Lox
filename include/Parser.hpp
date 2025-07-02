@@ -25,6 +25,8 @@ class Parser {
         std::unique_ptr<Expr> term();
         std::unique_ptr<Expr> factor();
         std::unique_ptr<Expr> unary();
+        std::unique_ptr<Expr> finishCall(std::unique_ptr<Expr> callee);
+        std::unique_ptr<Expr> call();
         std::unique_ptr<Expr> primary();
         // std::unique_ptr<Expr> comma();
         std::unique_ptr<Expr> ternary();
@@ -41,6 +43,7 @@ class Parser {
         std::unique_ptr<Stmt> printStatement();
         std::unique_ptr<Stmt> whileStatement();
         std::unique_ptr<Stmt> expressionStatement();
+        std::unique_ptr<Stmt> function(std::string kind);
         std::vector<std::unique_ptr<Stmt>> block();
         std::unique_ptr<Stmt> declaration();
         std::unique_ptr<Stmt> varDeclaration();
