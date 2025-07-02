@@ -35,6 +35,7 @@ class Parser {
         std::unique_ptr<Expr> land(); // Logical and
         Token consume(TokenType type, std::string message);
         void synchronize();
+        std::unique_ptr<Expr> lambdaExpression();
         std::unique_ptr<Expr> laparse(std::function<std::unique_ptr<Expr>()> op_type, std::initializer_list<TokenType> types);
 
         std::unique_ptr<Stmt> statement();

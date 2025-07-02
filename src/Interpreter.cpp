@@ -3,6 +3,8 @@
 #include <memory>
 #include "Interpreter.hpp"
 #include "BreakException.hpp"
+#include "LoxCallable.hpp"
+#include "LoxLambda.hpp"
 #include "ReturnException.hpp"
 #include "Expr/Var.hpp"
 #include "Token.hpp"
@@ -233,6 +235,20 @@ std::any Interpreter::visitAssign(const Assign& expr) {
     std::any value = evaluate(expr.getValue());
     environment->assign(expr.getName(), value);
     return value;
+}
+
+std::any Interpreter::visitLambda(const Lambda& expr) {
+    auto params = expr.getParams(); 
+    auto body = const_cast<Lambda&>(expr).takeBody();
+
+    std::shared_ptr<LoxLambda> lambda = std::make_shared<LoxLambda>(
+        std::move(params),
+        std::move(body),
+        environment
+    );
+
+
+    return std::static_pointer_cast<LoxCallable>(lambda);
 }
 
 

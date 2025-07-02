@@ -186,6 +186,11 @@ std::unique_ptr<Stmt> Parser::breakStatement() {
 
 std::unique_ptr<Stmt> Parser::expressionStatement() {
     std::unique_ptr<Expr> expr = expression();
+
+    if (dynamic_cast<Lambda*>(expr.get())) {
+        error(previous(), "Anonymous function expression in expression statement.");
+    }
+
     if (repl) {
         if (check(TokenType::SEMICOLON)) advance();
     } else {
@@ -336,6 +341,7 @@ std::unique_ptr<Expr> Parser::primary() {
     if (match({TokenType::FALSE})) return std::make_unique<Literal>(false);
     if (match({TokenType::TRUE})) return std::make_unique<Literal>(true);
     if (match({TokenType::NIL})) return std::make_unique<Literal>(std::any{});
+    if (match({TokenType::FUN})) return lambdaExpression();
 
     if (match({TokenType::NUMBER, TokenType::STRING})) {
         return std::make_unique<Literal>(previous().literal);
@@ -352,6 +358,27 @@ std::unique_ptr<Expr> Parser::primary() {
     }
 
     throw error(peek(), "Expect expression.");
+}
+
+std::unique_ptr<Expr> Parser::lambdaExpression() {
+
+    consume(TokenType::LEFT_PAREN, "Expect '(' after 'fun'.");
+
+    std::vector<Token> parameters;
+    if (!check(TokenType::RIGHT_PAREN)) {
+        do {
+            if (parameters.size() >= 255) {
+                error(peek(), "Can't have more than 255 parameters.");
+            }
+
+            parameters.push_back(consume(TokenType::IDENTIFIER, "Expect parameter name."));
+        } while (match({TokenType::COMMA}));
+    }
+
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after parameters.");
+    consume(TokenType::LEFT_BRACE, "Expect '{' before function body.");
+    std::vector<std::unique_ptr<Stmt>> body = block();
+    return std::make_unique<Lambda>(parameters, std::move(body));
 }
 
 /* // Comma operator

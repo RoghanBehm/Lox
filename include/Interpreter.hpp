@@ -13,6 +13,7 @@
 #include "Expr/Call.hpp"
 #include "Expr/Assign.hpp"
 #include "Expr/Logical.hpp"
+#include "Expr/Lambda.hpp"
 #include "Stmt/Stmt.hpp"
 #include "Stmt/StmtVisitor.hpp"
 #include "Stmt/Expression.hpp"
@@ -34,6 +35,7 @@ public:
     std::any evaluate(const Expr& expr);
     std::string stringify(std::any object);
     std::shared_ptr<Environment> globals = std::make_shared<Environment>();
+
     // Expr visit methods
     std::any visitLiteral(const Literal& expr) override;
     std::any visitGrouping(const Grouping& expr) override;
@@ -45,6 +47,7 @@ public:
     std::any visitVar(const Var& expr) override;
     std::any visitComma(const Comma& expr) override;
     std::any visitTernary(const Ternary& expr) override;
+    std::any visitLambda(const Lambda& expr) override;
 
     // Stmt visit methods
     void visitExpression(const Expression& stmt) override;

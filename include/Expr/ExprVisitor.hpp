@@ -10,6 +10,7 @@ class Unary;
 class Var;
 class Comma;
 class Ternary;
+class Lambda;
 
 template<typename R>
 class ExprVisitor {
@@ -26,4 +27,5 @@ public:
     virtual R visitVar(const Var& expr) = 0;
     virtual R visitComma(const Comma& expr) = 0;
     virtual R visitTernary(const Ternary& expr) = 0;
+    virtual R visitLambda(const Lambda& expr) = 0;
 };
