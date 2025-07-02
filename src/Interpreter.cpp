@@ -3,6 +3,7 @@
 #include <memory>
 #include "Interpreter.hpp"
 #include "BreakException.hpp"
+#include "ReturnException.hpp"
 #include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
@@ -79,6 +80,13 @@ void Interpreter::visitFunction(const Function& stmt) {
 void Interpreter::visitPrint(const Print& stmt) {
     std::any value = evaluate(stmt.getExpr());
     std::cout << stringify(value) << "\n";
+}
+
+void Interpreter::visitReturn(const Return& stmt) {
+    std::any value = NULL;
+    if (stmt.hasValue()) value = evaluate(stmt.getValue());
+
+    throw ReturnException(value);
 }
 
 void Interpreter::visitVarStmt(const VarStmt& stmt) {
@@ -311,11 +319,6 @@ std::any Interpreter::visitTernary(const Ternary& expr) {
 //////////////
 
 // STATEMENTS
-
-void Interpreter::visitReturn(const Return& stmt) {
-    // implement this
-}
-
 
 
 //////////////

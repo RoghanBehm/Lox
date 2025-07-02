@@ -17,6 +17,7 @@
 #include "Stmt/StmtVisitor.hpp"
 #include "Stmt/Expression.hpp"
 #include "Stmt/Print.hpp"
+#include "Stmt/Return.hpp"
 #include "Stmt/VarStmt.hpp"
 #include "Stmt/While.hpp"
 #include "Stmt/Block.hpp"

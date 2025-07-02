@@ -1,5 +1,6 @@
 #include "LoxFunction.hpp"
 #include "Interpreter.hpp"
+#include "ReturnException.hpp"
 #include <memory>
 
 LoxFunction::LoxFunction(const Function& declaration, std::shared_ptr<Environment> closure) 
@@ -11,7 +12,11 @@ std::any LoxFunction::call(Interpreter& interpreter, const std::vector<std::any>
         env->define(declaration.getParams().at(i).lexeme, arguments.at(i));
     }
 
-    interpreter.executeBlock(declaration.getBody(), env);
+    try {
+        interpreter.executeBlock(declaration.getBody(), env);
+    } catch (const ReturnException& returnValue) {
+        return returnValue.value;
+    }
     return nullptr;
 }
 
