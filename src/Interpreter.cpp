@@ -37,6 +37,10 @@ void Interpreter::execute(const Stmt& stmt) {
     stmt.accept(*this);
 }
 
+void Interpreter::resolve(const Expr& expr, int depth) {
+    locals[&expr] = depth;
+}
+
 void Interpreter::executeBlock(
     const std::vector<std::unique_ptr<Stmt>>& statements,
     std::shared_ptr<Environment> newEnvironment
@@ -56,12 +60,22 @@ void Interpreter::executeBlock(
     environment = previous;
 }
 
+std::any Interpreter::lookUpVariable(Token name, const Expr& expr) {
 
+    if (locals.find(&expr) != locals.end()) {
+        int distance = locals.at(&expr); 
+        return environment->getAt(distance, name.lexeme);
+    } else {
+        return globals->get(name);
+    }
+}
+
+
+// STATEMENTS
 void Interpreter::visitBlock(const Block& stmt) {
     executeBlock(stmt.getStatements(), std::make_shared<Environment>(environment));
 }
 
-// STATEMENTS
 void Interpreter::visitExpression(const Expression& stmt) {
     evaluate(stmt.getExpr());
 }
@@ -228,12 +242,21 @@ std::any Interpreter::visitUnary(const Unary& expr) {
 }
 
 std::any Interpreter::visitVar(const Var& expr) {
-    return environment->get(expr.getName());
+    return lookUpVariable(expr.getName(), expr);
 }
 
 std::any Interpreter::visitAssign(const Assign& expr) {
     std::any value = evaluate(expr.getValue());
-    environment->assign(expr.getName(), value);
+    
+    if (locals.find(&expr) != locals.end()) {
+        int distance = locals.at(&expr);
+        environment->assignAt(distance, expr.getName(), value);
+    } else {
+        globals->assign(expr.getName(), value);
+    }
+    
+ 
+
     return value;
 }
 
@@ -327,10 +350,12 @@ std::string Interpreter::stringify(std::any object) {
 
 std::any Interpreter::visitComma(const Comma& expr) {
     // implement this
+    return {};
 }
 
 std::any Interpreter::visitTernary(const Ternary& expr) {
     // implement this
+    return {};
 }
 //////////////
 

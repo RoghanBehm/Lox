@@ -10,6 +10,7 @@ class Environment {
 private:
     std::unordered_map<std::string, std::any> values;
     std::shared_ptr<Environment> enclosing;
+
 public:
     void define(std::string name, std::any value);
     std::any get(Token name);
@@ -23,4 +24,13 @@ public:
         return enclosing;
     }
     
+    ~Environment() {
+        values.clear();
+    }
+
+    void clear();
+
+    std::any getAt(int distance, std::string name);
+    void assignAt(int distance, Token name, std::any value);
+    Environment* ancestor(int distance);
 };

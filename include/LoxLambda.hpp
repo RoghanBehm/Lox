@@ -20,5 +20,5 @@ public:
 private:
     std::vector<Token> params;
     std::vector<std::unique_ptr<Stmt>> body;
-    std::shared_ptr<Environment> closure;
+    std::weak_ptr<Environment> closure;
 };

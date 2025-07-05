@@ -2,6 +2,7 @@
 
 #include <any>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include "Environment.hpp"
 #include "Expr/Expr.hpp"
@@ -30,11 +31,14 @@ class Lox;
 class Interpreter : public ExprVisitor<std::any>, public StmtVisitor<void> {
 public:
     Interpreter(Lox& lox);
+    virtual ~Interpreter() = default;
     void interpret(const std::vector<std::unique_ptr<Stmt>>& statements);
     void executeBlock(const std::vector<std::unique_ptr<Stmt>>& statements, std::shared_ptr<Environment> environment);
     std::any evaluate(const Expr& expr);
     std::string stringify(std::any object);
+    void resolve(const Expr& expr, int depth);
     std::shared_ptr<Environment> globals = std::make_shared<Environment>();
+
 
     // Expr visit methods
     std::any visitLiteral(const Literal& expr) override;
@@ -72,7 +76,9 @@ private:
     void checkNumberOperand(Token op, std::any operand);
     void checkNumberOperands(Token op, std::any left, std::any right);
     void checkDivideByZero(Token op, std::any right);
+    std::unordered_map<const Expr*, int> locals;
     void execute(const Stmt& stmt);
+    std::any lookUpVariable(Token name, const Expr& expr);
     Lox& lox;
 };
 

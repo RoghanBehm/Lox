@@ -1,5 +1,4 @@
 #include "Environment.hpp"
-#include "Expr/ExprVisitor.hpp"
 #include "LoxCallable.hpp"
 #include "Stmt/Function.hpp"
 #include <memory>
@@ -16,5 +15,5 @@ public:
 private:
     const Function& declaration;
  
-    std::shared_ptr<Environment> closure;
+    std::weak_ptr<Environment> closure;
 };

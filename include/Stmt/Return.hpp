@@ -13,6 +13,7 @@ public:
 
     bool hasValue() const { return value.get() != nullptr; }
     const Expr& getValue() const { return *value; }
+    const Token getKeyword() const { return keyword; }
 
 private:
     Token keyword;

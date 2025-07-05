@@ -8,7 +8,7 @@ LoxFunction::LoxFunction(const Function& declaration, std::shared_ptr<Environmen
 
 
 std::any LoxFunction::call(Interpreter& interpreter, const std::vector<std::any>& arguments) {
-    auto env = std::make_shared<Environment>(closure);
+    auto env = std::make_shared<Environment>(closure.lock());
     for (int i = 0; i < static_cast<int>(declaration.getParams().size()); ++i) {
         env->define(declaration.getParams().at(i).lexeme, arguments.at(i));
     }

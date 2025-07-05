@@ -9,13 +9,15 @@
 #include "Scanner.hpp"
 #include "to_string.hpp"
 #include "Parser.hpp"
+#include "Resolver.hpp"
 
-Interpreter* Lox::interpreter = nullptr;
 
-Lox::Lox() {
-    interpreter = new Interpreter(*this);
-}
-bool Lox::hadRuntimeError = false;
+
+Lox::Lox() 
+    : hadError(false),
+      hadRuntimeError(false),
+      interpreter(std::make_unique<Interpreter>(*this)) {}
+
 
 bool Lox::runFile(const std::string& path) {
     std::ifstream file(path);
@@ -32,10 +34,10 @@ bool Lox::runFile(const std::string& path) {
     }
 
     run(source, false);
-    if (Lox::hadError) {
+    if (hadError) {
         exit(65);
     }
-    if (Lox::hadRuntimeError) {
+    if (hadRuntimeError) {
         exit(70);
     }
 
@@ -49,6 +51,14 @@ void Lox::run(std::string source, bool repl) {
     
     try {
         std::vector<std::unique_ptr<Stmt>> statements = parser.parse();
+        
+        //Stop if there was a parse error
+        if (hadError) return;
+
+        Resolver resolver(*interpreter, *this);
+        resolver.resolve(statements);
+
+        // Stop if there was a resolution error
         if (hadError) return;
         
         if (statements.empty()) {
@@ -67,7 +77,7 @@ void Lox::run(std::string source, bool repl) {
     } catch (const Parser::ParseError&) {
         return;
     }    
-
+    interpreter->globals->clear();
 }
 
 void Lox::runPrompt() {
