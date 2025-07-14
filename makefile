@@ -1,4 +1,5 @@
 # Compiler and flags
+CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -fsanitize=address,undefined -Iinclude -g
 #Valgrind # CXXFLAGS = -std=c++20 -Wall -Wextra -Iinclude -g -O0
 

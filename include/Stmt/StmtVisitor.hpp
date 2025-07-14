@@ -9,6 +9,7 @@ class Return;
 class VarStmt;
 class While;
 class Break;
+class Class;
 
 template<typename R>
 class StmtVisitor {
@@ -24,4 +25,5 @@ public:
     virtual R visitVarStmt(const VarStmt& stmt) = 0;
     virtual R visitWhile(const While& stmt) = 0;
     virtual R visitBreak(const Break& stmt) = 0;
+    virtual R visitClass(const Class& stmt) = 0;
 };

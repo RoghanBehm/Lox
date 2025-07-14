@@ -15,6 +15,8 @@
 #include "Expr/Assign.hpp"
 #include "Expr/Logical.hpp"
 #include "Expr/Lambda.hpp"
+#include "Expr/Get.hpp"
+#include "Expr/Set.hpp"
 #include "Stmt/Stmt.hpp"
 #include "Stmt/StmtVisitor.hpp"
 #include "Stmt/Expression.hpp"
@@ -25,6 +27,7 @@
 #include "Stmt/Block.hpp"
 #include "Stmt/If.hpp"
 #include "Stmt/Break.hpp"
+#include "Stmt/Class.hpp"
 
 class Lox; 
 
@@ -46,8 +49,10 @@ public:
     std::any visitUnary(const Unary& expr) override;
     std::any visitBinary(const Binary& expr) override;
     std::any visitCall(const Call& expr) override;
+    std::any visitGet(const Get& expr) override;
     std::any visitAssign(const Assign& expr) override;
     std::any visitLogical(const Logical& expr) override;
+    std::any visitSet(const Set& expr) override;
     std::any visitVar(const Var& expr) override;
     std::any visitComma(const Comma& expr) override;
     std::any visitTernary(const Ternary& expr) override;
@@ -57,6 +62,7 @@ public:
     void visitExpression(const Expression& stmt) override;
     void visitPrint(const Print& stmt) override;
     void visitBlock(const Block& stmt) override;
+    void visitClass(const Class& stmt) override;
     void visitFunction(const Function& stmt) override;
     void visitIf(const If& stmt) override;
     void visitReturn(const Return& stmt) override;

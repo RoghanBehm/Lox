@@ -1,5 +1,6 @@
 #include "to_string.hpp"
 #include <iomanip>
+#include <sstream>
 
 std::string tokenTypeToString(TokenType type) {
     switch (type) {

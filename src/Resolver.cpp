@@ -4,8 +4,11 @@
 #include "Stmt/VarStmt.hpp"
 #include "Stmt/Block.hpp"
 #include "Stmt/Function.hpp"
+#include "Stmt/Class.hpp"
 #include "Expr/Var.hpp"
 #include "Expr/Assign.hpp"
+#include "Expr/Get.hpp"
+#include "Expr/Set.hpp"
 
 Resolver::Resolver(Interpreter& interpreter, Lox& lox) : interpreter(interpreter), lox(lox) {};
 
@@ -13,6 +16,16 @@ void Resolver::visitBlock(const Block& stmt) {
     beginScope();
     resolve(stmt.getStatements());
     endScope(); 
+}
+
+void Resolver::visitClass(const Class& stmt) {
+    declare(stmt.getName());
+    define(stmt.getName());
+
+    for (const auto& method : stmt.getMethods()) {
+        FunctionType declaration = FunctionType::METHOD;
+        resolveFunction(*method, declaration);
+    }
 }
 
 void Resolver::visitVarStmt(const VarStmt& stmt) {
@@ -94,6 +107,17 @@ std::any Resolver::visitCall(const Call& expr) {
         resolve(*argument);
     }
 
+    return {};
+}
+
+std::any Resolver::visitGet(const Get& expr) {
+    resolve(expr.getObject());
+    return {};
+}
+
+std::any Resolver::visitSet(const Set& expr) {
+    resolve(expr.getValue());
+    resolve(expr.getObject());
     return {};
 }
 

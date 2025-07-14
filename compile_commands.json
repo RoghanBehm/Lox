@@ -5,15 +5,71 @@
       "-std=c++20",
       "-Wall",
       "-Wextra",
+      "-fsanitize=address,undefined",
       "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/AstPrinter.o",
+      "src/AstPrinter.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/AstPrinter.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/AstPrinter.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Environment.o",
+      "src/Environment.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Environment.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Environment.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Interpreter.o",
+      "src/Interpreter.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Interpreter.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Interpreter.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
       "-c",
       "-o",
       "obj/Lox.o",
       "src/Lox.cpp"
     ],
-    "directory": "/home/roghan/repo/cplox/lox",
-    "file": "/home/roghan/repo/cplox/lox/src/Lox.cpp",
-    "output": "/home/roghan/repo/cplox/lox/obj/Lox.o"
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Lox.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Lox.o"
   },
   {
     "arguments": [
@@ -21,15 +77,107 @@
       "-std=c++20",
       "-Wall",
       "-Wextra",
+      "-fsanitize=address,undefined",
       "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/LoxCallable.o",
+      "src/LoxCallable.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/LoxCallable.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/LoxCallable.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/LoxFunction.o",
+      "src/LoxFunction.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/LoxFunction.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/LoxFunction.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/LoxLambda.o",
+      "src/LoxLambda.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/LoxLambda.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/LoxLambda.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Parser.o",
+      "src/Parser.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Parser.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Parser.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Resolver.o",
+      "src/Resolver.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Resolver.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Resolver.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
       "-c",
       "-o",
       "obj/Scanner.o",
       "src/Scanner.cpp"
     ],
-    "directory": "/home/roghan/repo/cplox/lox",
-    "file": "/home/roghan/repo/cplox/lox/src/Scanner.cpp",
-    "output": "/home/roghan/repo/cplox/lox/obj/Scanner.o"
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Scanner.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Scanner.o"
   },
   {
     "arguments": [
@@ -37,15 +185,17 @@
       "-std=c++20",
       "-Wall",
       "-Wextra",
+      "-fsanitize=address,undefined",
       "-Iinclude",
+      "-g",
       "-c",
       "-o",
       "obj/Token.o",
       "src/Token.cpp"
     ],
-    "directory": "/home/roghan/repo/cplox/lox",
-    "file": "/home/roghan/repo/cplox/lox/src/Token.cpp",
-    "output": "/home/roghan/repo/cplox/lox/obj/Token.o"
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Token.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Token.o"
   },
   {
     "arguments": [
@@ -53,15 +203,17 @@
       "-std=c++20",
       "-Wall",
       "-Wextra",
+      "-fsanitize=address,undefined",
       "-Iinclude",
+      "-g",
       "-c",
       "-o",
       "obj/main.o",
       "src/main.cpp"
     ],
-    "directory": "/home/roghan/repo/cplox/lox",
-    "file": "/home/roghan/repo/cplox/lox/src/main.cpp",
-    "output": "/home/roghan/repo/cplox/lox/obj/main.o"
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/main.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/main.o"
   },
   {
     "arguments": [
@@ -69,14 +221,376 @@
       "-std=c++20",
       "-Wall",
       "-Wextra",
+      "-fsanitize=address,undefined",
       "-Iinclude",
+      "-g",
       "-c",
       "-o",
       "obj/to_string.o",
       "src/to_string.cpp"
     ],
-    "directory": "/home/roghan/repo/cplox/lox",
-    "file": "/home/roghan/repo/cplox/lox/src/to_string.cpp",
-    "output": "/home/roghan/repo/cplox/lox/obj/to_string.o"
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/to_string.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/to_string.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Assign.o",
+      "src/Expr/Assign.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Assign.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Assign.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Binary.o",
+      "src/Expr/Binary.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Binary.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Binary.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Call.o",
+      "src/Expr/Call.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Call.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Call.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Comma.o",
+      "src/Expr/Comma.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Comma.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Comma.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Grouping.o",
+      "src/Expr/Grouping.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Grouping.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Grouping.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Lambda.o",
+      "src/Expr/Lambda.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Lambda.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Lambda.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Literal.o",
+      "src/Expr/Literal.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Literal.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Literal.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Logical.o",
+      "src/Expr/Logical.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Logical.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Logical.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Ternary.o",
+      "src/Expr/Ternary.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Ternary.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Ternary.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Unary.o",
+      "src/Expr/Unary.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Unary.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Unary.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Expr/Var.o",
+      "src/Expr/Var.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Expr/Var.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Expr/Var.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Block.o",
+      "src/Stmt/Block.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Block.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Block.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Break.o",
+      "src/Stmt/Break.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Break.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Break.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Expression.o",
+      "src/Stmt/Expression.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Expression.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Expression.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Function.o",
+      "src/Stmt/Function.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Function.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Function.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/If.o",
+      "src/Stmt/If.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/If.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/If.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Print.o",
+      "src/Stmt/Print.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Print.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Print.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/Return.o",
+      "src/Stmt/Return.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/Return.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/Return.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/VarStmt.o",
+      "src/Stmt/VarStmt.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/VarStmt.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/VarStmt.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-Wall",
+      "-Wextra",
+      "-fsanitize=address,undefined",
+      "-Iinclude",
+      "-g",
+      "-c",
+      "-o",
+      "obj/Stmt/While.o",
+      "src/Stmt/While.cpp"
+    ],
+    "directory": "/Users/roghanbehm/repo/Lox",
+    "file": "/Users/roghanbehm/repo/Lox/src/Stmt/While.cpp",
+    "output": "/Users/roghanbehm/repo/Lox/obj/Stmt/While.o"
   }
 ]

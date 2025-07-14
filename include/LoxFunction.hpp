@@ -1,3 +1,4 @@
+#pragma once
 #include "Environment.hpp"
 #include "LoxCallable.hpp"
 #include "Stmt/Function.hpp"

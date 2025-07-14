@@ -1,16 +1,19 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include "Interpreter.hpp"
 #include "BreakException.hpp"
 #include "LoxCallable.hpp"
+#include "LoxInstance.hpp"
 #include "LoxLambda.hpp"
 #include "ReturnException.hpp"
 #include "Expr/Var.hpp"
 #include "Token.hpp"
 #include "token_type.hpp"
 #include "Lox.hpp"
-#include "LoxFunction.hpp"
+#include "LoxClass.hpp"
 
 
 Interpreter::Interpreter(Lox& lox) : lox(lox){
@@ -86,6 +89,19 @@ void Interpreter::visitIf(const If& stmt) {
     } else if (stmt.hasElseBranch()) {
         execute(stmt.getElseBranch());
     }
+}
+
+void Interpreter::visitClass(const Class& stmt) {
+    environment->define(stmt.getName().lexeme, NULL);
+
+    std::unordered_map<std::string, std::shared_ptr<LoxFunction>> methods;
+    for (const auto& method : stmt.getMethods()) {
+        auto function = std::make_shared<LoxFunction>(*method, environment);
+        methods[method->getName().lexeme] = function;
+    }
+
+    std::shared_ptr<LoxCallable> klass = std::make_shared<LoxClass>(stmt.getName().lexeme, methods);
+    environment->assign(stmt.getName(), klass);
 }
 
 void Interpreter::visitFunction(const Function& stmt) {
@@ -206,6 +222,16 @@ std::any Interpreter::visitCall(const Call& expr) {
     return function->call(*this, arguments);
 }
 
+std::any Interpreter::visitGet(const Get& expr) {
+    std::any object = evaluate(expr.getObject());
+    if (object.type() == typeid(std::shared_ptr<LoxInstance>)) {
+        auto instance = std::any_cast<std::shared_ptr<LoxInstance>>(object);
+        return instance->get(expr.getName());
+    }
+    throw RuntimeError(expr.getName(), "Only instances have properties.");
+}
+
+
 std::any Interpreter::visitLiteral(const Literal& expr) {
     return expr.getLiteral();
 }
@@ -220,6 +246,21 @@ std::any Interpreter::visitLogical(const Logical& expr) {
     }
 
     return evaluate(expr.getRightExpr());
+}
+
+std::any Interpreter::visitSet(const Set& expr) {
+    std::any object = evaluate(expr.getObject());
+    
+    if (!(object.type() == typeid(std::shared_ptr<LoxInstance>))) {
+        throw RuntimeError(expr.getName(),
+             "Only instances have fields.");
+    }
+
+    auto instance = std::any_cast<std::shared_ptr<LoxInstance>>(object);
+    std::any value = evaluate(expr.getValue());
+    instance->set(expr.getName(), value);
+
+    return value;
 }
 
 std::any Interpreter::visitGrouping(const Grouping& expr) {
@@ -337,6 +378,11 @@ std::string Interpreter::stringify(std::any object) {
         return text;
     }
 
+    if (object.type() == typeid(std::shared_ptr<LoxInstance>)) {
+        auto instance = std::any_cast<std::shared_ptr<LoxInstance>>(object);
+        return instance->toString();
+    }
+
     return std::any_cast<std::string>(object);
 }
 
@@ -357,9 +403,4 @@ std::any Interpreter::visitTernary(const Ternary& expr) {
     // implement this
     return {};
 }
-//////////////
-
-// STATEMENTS
-
-
 //////////////

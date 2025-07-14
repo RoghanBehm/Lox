@@ -14,6 +14,7 @@ public:
     void resolve(const std::vector<std::unique_ptr<Stmt>>& statements);
 
     void visitBlock(const Block& stmt) override;
+    void visitClass(const Class& stmt) override;
     void visitVarStmt(const VarStmt& stmt) override;
     void visitFunction(const Function& stmt) override;
     void visitExpression(const Expression& stmt) override;
@@ -28,6 +29,8 @@ public:
     std::any visitBinary(const Binary& expr) override;
     std::any visitLambda(const Lambda& expr) override;
     std::any visitCall(const Call& expr) override;
+    std::any visitGet(const Get& expr) override;
+    std::any visitSet(const Set& expr) override;
     std::any visitGrouping(const Grouping& expr) override;
     std::any visitLiteral(const Literal& expr) override;
     std::any visitLogical(const Logical& expr) override;
@@ -40,7 +43,8 @@ private:
     Lox& lox;    
     enum class FunctionType {
         NONE,
-        FUNCTION
+        FUNCTION,
+        METHOD
     };
     FunctionType currentFunction = FunctionType::NONE;
     void beginScope();

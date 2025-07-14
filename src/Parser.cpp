@@ -10,6 +10,8 @@
 #include "Expr/Assign.hpp"
 #include "Expr/Logical.hpp"
 #include "Expr/Call.hpp"
+#include "Expr/Get.hpp"
+#include "Expr/Set.hpp"
 // #include "Expr/Comma.hpp"
 // #include "Expr/Ternary.hpp"
 #include "Stmt/If.hpp"
@@ -21,9 +23,11 @@
 #include "Stmt/Break.hpp"
 #include "Stmt/Function.hpp"
 #include "Stmt/Return.hpp"
+#include "Stmt/Class.hpp"
 #include <any>
 #include <cstddef>
 #include <memory>
+#include <vector>
 
 // Constructor
 Parser::Parser(std::vector<Token> tokens, Lox& lox, bool repl)
@@ -55,6 +59,7 @@ std::unique_ptr<Expr> Parser::expression() {
 
 std::unique_ptr<Stmt> Parser::declaration() {
     try {
+        if (match({TokenType::CLASS})) return classDeclaration();
         if (match({TokenType::FUN})) return function("function");
         if (match({TokenType::VAR})) return varDeclaration();
 
@@ -63,6 +68,20 @@ std::unique_ptr<Stmt> Parser::declaration() {
         synchronize();
         return NULL;
     }
+}
+
+std::unique_ptr<Stmt> Parser::classDeclaration() {
+    Token name = consume(TokenType::IDENTIFIER, "Expect class name");
+    consume(TokenType::LEFT_BRACE, "Expect '{' before class body.");
+
+    std::vector<std::unique_ptr<Function>> methods;
+    while (!check(TokenType::RIGHT_BRACE) && !isAtEnd()) {
+        methods.push_back(function("method"));
+    }
+
+    consume(TokenType::RIGHT_BRACE, "Expect '}' after class body.");
+
+    return std::make_unique<Class>(name, std::move(methods));
 }
 
 std::unique_ptr<Stmt> Parser::statement() {
@@ -199,7 +218,7 @@ std::unique_ptr<Stmt> Parser::expressionStatement() {
     return std::make_unique<Expression>(std::move(expr));
 }
 
-std::unique_ptr<Stmt> Parser::function(std::string kind) {
+std::unique_ptr<Function> Parser::function(std::string kind) {
     Token name = consume(TokenType::IDENTIFIER, "Expect " + kind + " name.");
     consume(TokenType::LEFT_PAREN, "Expect '(' after " + kind + " name.");
     std::vector<Token> parameters;
@@ -239,6 +258,8 @@ std::unique_ptr<Expr> Parser::assignment() {
 
         if (auto varExpr = dynamic_cast<Var*>(expr.get())) {
             return std::make_unique<Assign>(varExpr->getName(), std::move(value));
+        } else if (auto get = dynamic_cast<Get*>(expr.get())) {
+            return std::make_unique<Set>(&get->getObject(), get->getName(), std::move(value));
         } else {
             error(equals, "Invalid assignment target.");
         }
@@ -329,7 +350,12 @@ std::unique_ptr<Expr> Parser::call() {
     while (true) {
             if (match({TokenType::LEFT_PAREN})) {
                 expr = finishCall(std::move(expr));
-            } else {
+            } else if (match({TokenType::DOT})) {
+                Token name = consume(TokenType::IDENTIFIER,
+                    "Expect property name after '.'.");
+                expr = std::make_unique<Get>(std::move(expr), name);
+            }
+            else {
                 break;
             }
     }

@@ -11,6 +11,8 @@ class Var;
 class Comma;
 class Ternary;
 class Lambda;
+class Get;
+class Set;
 
 template<typename R>
 class ExprVisitor {
@@ -28,4 +30,6 @@ public:
     virtual R visitComma(const Comma& expr) = 0;
     virtual R visitTernary(const Ternary& expr) = 0;
     virtual R visitLambda(const Lambda& expr) = 0;
+    virtual R visitGet(const Get& expr) = 0;
+    virtual R visitSet(const Set& expr) = 0;
 };
