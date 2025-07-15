@@ -92,11 +92,16 @@ void Interpreter::visitIf(const If& stmt) {
 }
 
 void Interpreter::visitClass(const Class& stmt) {
+    
     environment->define(stmt.getName().lexeme, NULL);
 
+    auto classEnv = std::make_shared<Environment>(environment); 
+    
     std::unordered_map<std::string, std::shared_ptr<LoxFunction>> methods;
     for (const auto& method : stmt.getMethods()) {
-        auto function = std::make_shared<LoxFunction>(*method, environment);
+        bool isInitialiser = (method->getName().lexeme == "init");
+        
+        auto function = std::make_shared<LoxFunction>(*method, classEnv, isInitialiser);
         methods[method->getName().lexeme] = function;
     }
 
@@ -105,7 +110,7 @@ void Interpreter::visitClass(const Class& stmt) {
 }
 
 void Interpreter::visitFunction(const Function& stmt) {
-    std::shared_ptr<LoxCallable> function = std::make_shared<LoxFunction>(stmt, environment);
+    std::shared_ptr<LoxCallable> function = std::make_shared<LoxFunction>(stmt, environment, false);
     environment->define(stmt.getName().lexeme, function);
 }
 
@@ -118,7 +123,7 @@ void Interpreter::visitReturn(const Return& stmt) {
     std::any value = NULL;
     if (stmt.hasValue()) value = evaluate(stmt.getValue());
 
-    throw ReturnException(value);
+    throw ReturnException(value); 
 }
 
 void Interpreter::visitVarStmt(const VarStmt& stmt) {
@@ -205,12 +210,17 @@ std::any Interpreter::visitCall(const Call& expr) {
         arguments.push_back(evaluate(*argument));
     }
 
-    std::shared_ptr<LoxCallable> function;
+ std::shared_ptr<LoxCallable> function;
 
     try {
         function = std::any_cast<std::shared_ptr<LoxCallable>>(callee);
     } catch (const std::bad_any_cast&) {
-        throw RuntimeError(expr.getParen(), "Can only call functions and classes.");
+        try {
+            auto loxFunction = std::any_cast<std::shared_ptr<LoxFunction>>(callee);
+            function = loxFunction; 
+        } catch (const std::bad_any_cast&) {
+            throw RuntimeError(expr.getParen(), "Can only call functions and classes.");
+        }
     }
 
     if (static_cast<int>(arguments.size()) != function->arity()) {
@@ -261,6 +271,10 @@ std::any Interpreter::visitSet(const Set& expr) {
     instance->set(expr.getName(), value);
 
     return value;
+}
+
+std::any Interpreter::visitThis(const This& expr) {
+    return lookUpVariable(expr.getKeyword(), expr);
 }
 
 std::any Interpreter::visitGrouping(const Grouping& expr) {

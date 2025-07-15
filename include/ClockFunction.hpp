@@ -10,7 +10,7 @@ public:
         return 0;
     }
 
-    std::any call(Interpreter& interpreter, const std::vector<std::any>& argument) override {
+    std::any call(Interpreter& interpreter, const std::vector<std::any>& argument) const override {
         auto now = std::chrono::system_clock::now().time_since_epoch();
         auto seconds = std::chrono::duration_cast<std::chrono::milliseconds>(now).count() / 1000.0;
         return seconds;

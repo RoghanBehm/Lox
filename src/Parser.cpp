@@ -12,6 +12,7 @@
 #include "Expr/Call.hpp"
 #include "Expr/Get.hpp"
 #include "Expr/Set.hpp"
+#include "Expr/This.hpp"
 // #include "Expr/Comma.hpp"
 // #include "Expr/Ternary.hpp"
 #include "Stmt/If.hpp"
@@ -259,7 +260,7 @@ std::unique_ptr<Expr> Parser::assignment() {
         if (auto varExpr = dynamic_cast<Var*>(expr.get())) {
             return std::make_unique<Assign>(varExpr->getName(), std::move(value));
         } else if (auto get = dynamic_cast<Get*>(expr.get())) {
-            return std::make_unique<Set>(&get->getObject(), get->getName(), std::move(value));
+            return std::make_unique<Set>(std::move(get->takeObject()), get->getName(), std::move(value));
         } else {
             error(equals, "Invalid assignment target.");
         }
@@ -371,6 +372,10 @@ std::unique_ptr<Expr> Parser::primary() {
 
     if (match({TokenType::NUMBER, TokenType::STRING})) {
         return std::make_unique<Literal>(previous().literal);
+    }
+
+    if (match({TokenType::THIS})) {
+        return std::make_unique<This>(previous());
     }
 
     if (match({TokenType::IDENTIFIER})) {

@@ -13,6 +13,7 @@ class Ternary;
 class Lambda;
 class Get;
 class Set;
+class This;
 
 template<typename R>
 class ExprVisitor {
@@ -32,4 +33,5 @@ public:
     virtual R visitLambda(const Lambda& expr) = 0;
     virtual R visitGet(const Get& expr) = 0;
     virtual R visitSet(const Set& expr) = 0;
+    virtual R visitThis(const This& expr) = 0;
 };

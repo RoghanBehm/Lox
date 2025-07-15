@@ -14,6 +14,7 @@ public:
 
     const Expr& getObject() const { return *object; }
     const Token getName() const { return name; }
+    std::unique_ptr<Expr>& takeObject() { return object; }
 
 private:
     std::unique_ptr<Expr> object;

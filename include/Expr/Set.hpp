@@ -9,7 +9,7 @@
 
 class Set : public Expr {
 public:
-    Set(const Expr* object, Token name, std::unique_ptr<Expr> value);
+    Set(std::unique_ptr<Expr>, Token name, std::unique_ptr<Expr> value);
     std::any accept(ExprVisitor<std::any>& visitor) const override;
 
     const Expr& getObject() const { return *object; }
@@ -17,7 +17,7 @@ public:
     const Expr& getValue() const { return *value; }
 
 private:
-    const Expr* object;
+    std::unique_ptr<Expr> object;
     Token name;
     std::unique_ptr<Expr> value;
 };

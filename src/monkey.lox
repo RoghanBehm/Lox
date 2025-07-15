@@ -1,7 +1,12 @@
-class Bacon {
-  eat() {
-    print "Crunch crunch crunch!";
+class Foo {
+  init(a) {
+    this.a = a;
+  }
+
+  getA() {
+    return this.a;
   }
 }
 
-Bacon().eat(); // Prints "Crunch crunch crunch!".
+var foo = Foo(42);
+print foo.getA(); // Expect: 42

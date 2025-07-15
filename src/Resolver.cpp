@@ -1,4 +1,5 @@
 #include <memory>
+#include <iostream>
 #include "Resolver.hpp"
 #include "Expr/Lambda.hpp"
 #include "Stmt/VarStmt.hpp"
@@ -9,6 +10,7 @@
 #include "Expr/Assign.hpp"
 #include "Expr/Get.hpp"
 #include "Expr/Set.hpp"
+#include "Expr/This.hpp"
 
 Resolver::Resolver(Interpreter& interpreter, Lox& lox) : interpreter(interpreter), lox(lox) {};
 
@@ -19,13 +21,26 @@ void Resolver::visitBlock(const Block& stmt) {
 }
 
 void Resolver::visitClass(const Class& stmt) {
+    ClassType enclosingClass = currentClass;
+    currentClass = ClassType::CLASS;
+
     declare(stmt.getName());
     define(stmt.getName());
 
+    beginScope();
+    scopes.back()["this"] = true;
+
     for (const auto& method : stmt.getMethods()) {
         FunctionType declaration = FunctionType::METHOD;
+        if (method->getName().lexeme == "init") {
+            declaration = FunctionType::INITIALISER;
+        }
         resolveFunction(*method, declaration);
     }
+
+    endScope();
+
+    currentClass = enclosingClass;    
 }
 
 void Resolver::visitVarStmt(const VarStmt& stmt) {
@@ -63,6 +78,10 @@ void Resolver::visitReturn(const Return& stmt) {
     }
     
     if (stmt.hasValue()) {
+        if (currentFunction == FunctionType::INITIALISER) {
+            lox.error(stmt.getKeyword(),
+            "Can't return a value from an initialiser.");
+        }
         resolve(stmt.getValue());
     }
 }
@@ -118,6 +137,16 @@ std::any Resolver::visitGet(const Get& expr) {
 std::any Resolver::visitSet(const Set& expr) {
     resolve(expr.getValue());
     resolve(expr.getObject());
+    return {};
+}
+
+std::any Resolver::visitThis(const This& expr) {
+    if (currentClass == ClassType::NONE) {
+        lox.error(expr.getKeyword(),
+        "Can't use 'this' outside of a class.");
+        return {};
+    }
+    resolveLocal(expr, expr.getKeyword());
     return {};
 }
 

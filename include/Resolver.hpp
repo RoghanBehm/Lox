@@ -37,6 +37,7 @@ public:
     std::any visitUnary(const Unary& expr) override;
     std::any visitComma(const Comma& expr) override;
     std::any visitTernary(const Ternary& expr) override;
+    std::any visitThis(const This& expr) override;
 
 private:
     Interpreter& interpreter;
@@ -44,8 +45,17 @@ private:
     enum class FunctionType {
         NONE,
         FUNCTION,
+        INITIALISER,
         METHOD
     };
+
+    enum class ClassType {
+        NONE,
+        CLASS
+    };
+
+    ClassType currentClass = ClassType::NONE;
+
     FunctionType currentFunction = FunctionType::NONE;
     void beginScope();
     void endScope();
