@@ -1,12 +1,14 @@
-class Foo {
-  init(a) {
-    this.a = a;
-  }
-
-  getA() {
-    return this.a;
+class Doughnut {
+  cook() {
+    print "Fry until golden brown.";
   }
 }
 
-var foo = Foo(42);
-print foo.getA(); // Expect: 42
+class BostonCream < Doughnut {
+  cook() {
+    super.cook();
+    print "Pipe full of custard and coat with chocolate.";
+  }
+}
+
+BostonCream().cook();

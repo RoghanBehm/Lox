@@ -14,6 +14,7 @@ class Lambda;
 class Get;
 class Set;
 class This;
+class Super;
 
 template<typename R>
 class ExprVisitor {
@@ -34,4 +35,5 @@ public:
     virtual R visitGet(const Get& expr) = 0;
     virtual R visitSet(const Set& expr) = 0;
     virtual R visitThis(const This& expr) = 0;
+    virtual R visitSuper(const Super& expr) = 0;
 };

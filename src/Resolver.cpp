@@ -1,5 +1,4 @@
 #include <memory>
-#include <iostream>
 #include "Resolver.hpp"
 #include "Expr/Lambda.hpp"
 #include "Stmt/VarStmt.hpp"
@@ -10,6 +9,7 @@
 #include "Expr/Assign.hpp"
 #include "Expr/Get.hpp"
 #include "Expr/Set.hpp"
+#include "Expr/Super.hpp"
 #include "Expr/This.hpp"
 
 Resolver::Resolver(Interpreter& interpreter, Lox& lox) : interpreter(interpreter), lox(lox) {};
@@ -27,6 +27,22 @@ void Resolver::visitClass(const Class& stmt) {
     declare(stmt.getName());
     define(stmt.getName());
 
+    if (stmt.getSuperclass() != nullptr &&
+        stmt.getName().lexeme == stmt.getSuperclass()->getName().lexeme) {
+            lox.error(stmt.getSuperclass()->getName(),
+                "A class can't inherit from itself.");
+        }
+
+    if (stmt.getSuperclass() != nullptr) {
+        currentClass = ClassType::SUBCLASS;
+        resolve(*stmt.getSuperclass());
+    }
+
+    if (stmt.getSuperclass() != nullptr) {
+        beginScope();
+        scopes.back()["super"] = true;
+    }
+
     beginScope();
     scopes.back()["this"] = true;
 
@@ -39,6 +55,8 @@ void Resolver::visitClass(const Class& stmt) {
     }
 
     endScope();
+
+    if (stmt.getSuperclass() != nullptr) endScope();
 
     currentClass = enclosingClass;    
 }
@@ -137,6 +155,19 @@ std::any Resolver::visitGet(const Get& expr) {
 std::any Resolver::visitSet(const Set& expr) {
     resolve(expr.getValue());
     resolve(expr.getObject());
+    return {};
+}
+
+std::any Resolver::visitSuper(const Super& expr) {
+    if (currentClass == ClassType::NONE) {
+        lox.error(expr.getKeyword(),
+            "Can't use 'super' outside of a class");
+    } else if (currentClass != ClassType::SUBCLASS) {
+        lox.error(expr.getKeyword(),
+            "Can't use 'super' in a class with no superclass.");
+    }
+
+    resolveLocal(expr, expr.getKeyword());
     return {};
 }
 

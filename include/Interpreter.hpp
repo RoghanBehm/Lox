@@ -17,6 +17,7 @@
 #include "Expr/Lambda.hpp"
 #include "Expr/Get.hpp"
 #include "Expr/Set.hpp"
+#include "Expr/Super.hpp"
 #include "Expr/This.hpp"
 #include "Stmt/Stmt.hpp"
 #include "Stmt/StmtVisitor.hpp"
@@ -54,6 +55,7 @@ public:
     std::any visitAssign(const Assign& expr) override;
     std::any visitLogical(const Logical& expr) override;
     std::any visitSet(const Set& expr) override;
+    std::any visitSuper(const Super& expr) override;
     std::any visitThis(const This& expr) override;
     std::any visitVar(const Var& expr) override;
     std::any visitComma(const Comma& expr) override;

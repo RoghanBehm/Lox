@@ -31,6 +31,7 @@ public:
     std::any visitCall(const Call& expr) override;
     std::any visitGet(const Get& expr) override;
     std::any visitSet(const Set& expr) override;
+    std::any visitSuper(const Super& expr) override;
     std::any visitGrouping(const Grouping& expr) override;
     std::any visitLiteral(const Literal& expr) override;
     std::any visitLogical(const Logical& expr) override;
@@ -51,7 +52,8 @@ private:
 
     enum class ClassType {
         NONE,
-        CLASS
+        CLASS,
+        SUBCLASS
     };
 
     ClassType currentClass = ClassType::NONE;
